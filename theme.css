@@ -1,0 +1,260 @@
+/* Vivliostyle Theme with Container Styles */
+
+/* Base styles */
+@page {
+  size: A4;
+  margin: 20mm;
+  @top-center {
+    content: env(doc-title);
+    font-size: 10pt;
+    color: #666;
+  }
+  @bottom-center {
+    content: counter(page);
+    font-size: 10pt;
+  }
+}
+
+body {
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 10pt;
+  line-height: 1.8;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+h1 {
+  font-size: 2em;
+  border-bottom: 3px solid #333;
+  padding-bottom: 0.3em;
+}
+
+h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.2em;
+}
+
+h3 {
+  font-size: 1.2em;
+}
+
+p {
+  margin: 1em 0;
+  text-align: justify;
+}
+
+/* Code blocks */
+pre {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1em;
+  overflow-x: auto;
+  font-family: "Consolas", "Monaco", monospace;
+  font-size: 0.9em;
+}
+
+code {
+  background-color: #f5f5f5;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: "Consolas", "Monaco", monospace;
+  font-size: 0.9em;
+}
+
+pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Container styles */
+.warning, .tip, .note, .info, .caution, .important, .danger, .custom {
+  margin: 1.5em 0;
+  padding: 1em;
+  border-radius: 4px;
+  border-left: 4px solid;
+  background-color: #f8f9fa;
+}
+
+/* Note container */
+.note {
+  border-left-color: #0066cc;
+  background-color: #e6f2ff;
+}
+
+.note::before {
+  content: "📝 NOTE";
+  display: block;
+  font-weight: bold;
+  color: #0066cc;
+  margin-bottom: 0.5em;
+}
+
+/* Tip container */
+.tip {
+  border-left-color: #28a745;
+  background-color: #e6f7e6;
+}
+
+.tip::before {
+  content: "💡 TIP";
+  display: block;
+  font-weight: bold;
+  color: #28a745;
+  margin-bottom: 0.5em;
+}
+
+/* Warning container */
+.warning {
+  border-left-color: #ffc107;
+  background-color: #fff9e6;
+}
+
+.warning::before {
+  content: "⚠️ WARNING";
+  display: block;
+  font-weight: bold;
+  color: #cc9900;
+  margin-bottom: 0.5em;
+}
+
+/* Danger container */
+.danger {
+  border-left-color: #dc3545;
+  background-color: #ffe6e6;
+}
+
+.danger::before {
+  content: "🚨 DANGER";
+  display: block;
+  font-weight: bold;
+  color: #dc3545;
+  margin-bottom: 0.5em;
+}
+
+/* Info container */
+.info {
+  border-left-color: #17a2b8;
+  background-color: #e6f5f7;
+}
+
+.info::before {
+  content: "ℹ️ INFO";
+  display: block;
+  font-weight: bold;
+  color: #17a2b8;
+  margin-bottom: 0.5em;
+}
+
+/* Caution container */
+.caution {
+  border-left-color: #fd7e14;
+  background-color: #fff4e6;
+}
+
+.caution::before {
+  content: "🚧 CAUTION";
+  display: block;
+  font-weight: bold;
+  color: #fd7e14;
+  margin-bottom: 0.5em;
+}
+
+/* Important container */
+.important {
+  border-left-color: #e83e8c;
+  background-color: #fdf2f8;
+}
+
+.important::before {
+  content: "‼️ IMPORTANT";
+  display: block;
+  font-weight: bold;
+  color: #e83e8c;
+  margin-bottom: 0.5em;
+}
+
+/* Custom container */
+.custom {
+  border-left-color: #6c757d;
+  background-color: #f0f0f0;
+}
+
+/* Container content styling */
+.warning > *:last-child,
+.tip > *:last-child,
+.note > *:last-child,
+.info > *:last-child,
+.caution > *:last-child,
+.important > *:last-child,
+.danger > *:last-child,
+.custom > *:last-child {
+  margin-bottom: 0;
+}
+
+.warning p, .tip p, .note p, .info p, .caution p, .important p, .danger p, .custom p {
+  margin: 0.5em 0;
+}
+
+.warning ul, .tip ul, .note ul, .info ul, .caution ul, .important ul, .danger ul, .custom ul,
+.warning ol, .tip ol, .note ol, .info ol, .caution ol, .important ol, .danger ol, .custom ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+/* Nested containers */
+.warning .tip, .warning .note, .warning .info, .warning .caution, .warning .important, .warning .danger,
+.tip .warning, .tip .note, .tip .info, .tip .caution, .tip .important, .tip .danger,
+.note .warning, .note .tip, .note .info, .note .caution, .note .important, .note .danger,
+.info .warning, .info .tip, .info .note, .info .caution, .info .important, .info .danger,
+.caution .warning, .caution .tip, .caution .note, .caution .info, .caution .important, .caution .danger,
+.important .warning, .important .tip, .important .note, .important .info, .important .caution, .important .danger,
+.danger .warning, .danger .tip, .danger .note, .danger .info, .danger .caution, .danger .important {
+  margin: 0.5em 0;
+  border-width: 2px;
+}
+
+/* Lists */
+ul, ol {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+li {
+  margin: 0.3em 0;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.5em;
+  text-align: left;
+}
+
+th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+/* Print specific styles */
+@media print {
+  .remark-container {
+    break-inside: avoid;
+  }
+  
+  pre {
+    break-inside: avoid;
+  }
+}

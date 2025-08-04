@@ -1,0 +1,33 @@
+{
+  "name": "vivliostyle-remark-directive",
+  "version": "1.0.0",
+  "description": "Vivliostyle with remark-directive sample",
+  "type": "module",
+  "scripts": {
+    "preview": "npx vivliostyle preview",
+    "build": "npx vivliostyle build",
+    "pdf": "npx vivliostyle build"
+  },
+  "keywords": [
+    "vivliostyle",
+    "remark-containers",
+    "markdown"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "rehype-raw": "^7.0.0",
+    "rehype-stringify": "^10.0.0",
+    "remark-breaks": "^4.0.0",
+    "remark-directive": "^3.0.0",
+    "remark-frontmatter": "^5.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.0",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "@vivliostyle/cli": "^8.20.0"
+  }
+}
