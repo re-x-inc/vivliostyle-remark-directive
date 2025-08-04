@@ -6,7 +6,11 @@
   "scripts": {
     "preview": "npx vivliostyle preview",
     "build": "npx vivliostyle build",
-    "pdf": "npx vivliostyle build"
+    "pdf": "npx vivliostyle build",
+    "preview:revive": "npx vivliostyle preview --config vivliostyle.config.revive.js",
+    "build:revive": "npx vivliostyle build --config vivliostyle.config.revive.js",
+    "pdf:revive": "npx vivliostyle build --config vivliostyle.config.revive.js -o output-revive.pdf",
+    "test:revive": "node test-processor-revive.js"
   },
   "keywords": [
     "vivliostyle",

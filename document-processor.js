@@ -1,3 +1,14 @@
+/**
+ * Document Processor for Vivliostyle with remark-directive support
+ * 
+ * このプロセッサーは、unified ecosystem を使用して Markdown を HTML に変換します。
+ * 主要なプラグイン:
+ * - remark-parse: Markdown を mdast (Markdown AST) に変換
+ * - remark-directive: ::: 記法のディレクティブをサポート
+ * - remark-rehype: mdast を hast (HTML AST) に変換
+ * - rehype-stringify: hast を HTML 文字列に変換
+ */
+
 import rehypeRaw from "rehype-raw";
 import rehypeStringify from "rehype-stringify";
 import remarkBreaks from "remark-breaks";
@@ -8,7 +19,7 @@ import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
 
-// VFM figure plugin
+// VFM figure plugin - Vivliostyle 固有の図表処理
 import { hast as figureHast } from "@vivliostyle/vfm/lib/plugins/figure.js";
 
 // デバッグ用プラグイン - 各段階での状態を確認
@@ -72,7 +83,15 @@ function debugPlugin(stage) {
   };
 }
 
-// directive変換プラグイン
+/**
+ * remark プラグイン: directive を HTML 要素に変換
+ * 
+ * このプラグインは mdast (Markdown AST) の段階で動作し、
+ * remark-directive が生成した containerDirective ノードを
+ * remark-rehype が理解できる形式に変換します。
+ * 
+ * 例: :::div{.note} → <div class="note">
+ */
 function directiveHandler() {
   return (tree) => {
     try {
@@ -82,6 +101,7 @@ function directiveHandler() {
         return;
       }
       
+      // mdast ツリーを走査して containerDirective ノードを探す
       visit(tree, 'containerDirective', (node) => {
         if (node && node.name === "div") {
           console.log('Processing containerDirective:', {
@@ -89,10 +109,14 @@ function directiveHandler() {
             name: node.name,
             attributes: node.attributes
           });
+          
+          // remark-rehype が HTML に変換する際のヒントを設定
           const data = node.data || (node.data = {});
           const className = node.attributes?.class;
 
           if (className) {
+            // hName: HTML要素名
+            // hProperties: HTML属性
             data.hName = "div";
             data.hProperties = {
               className: className,
@@ -111,19 +135,32 @@ export default function documentProcessor(options = {}, metadata = {}) {
   console.log('\n🔧 documentProcessor called:', { options, metadata });
   console.log('Stack trace:', new Error().stack.split('\n').slice(1, 5).join('\n'));
   
-  // プロセッサーを作成して、処理結果を確認するラッパーを追加
+  /**
+   * unified プロセッサーパイプライン
+   * 
+   * 処理フロー:
+   * 1. remarkParse: Markdown テキスト → mdast (Markdown AST)
+   * 2. remarkDirective: ::: 記法を containerDirective ノードに変換
+   * 3. directiveHandler: containerDirective → HTML 変換のヒントを追加
+   * 4. remarkBreaks: 改行を <br> タグに変換
+   * 5. remarkFrontmatter: YAML フロントマターを処理
+   * 6. remarkRehype: mdast → hast (HTML AST) 変換
+   * 7. rehypeRaw: 生の HTML タグを処理
+   * 8. figureHast: 画像を figure 要素でラップ
+   * 9. rehypeStringify: hast → HTML 文字列
+   */
   const baseProcessor = unified()
-    .use(remarkParse)
-    .use(remarkDirective) // :::note構文サポート
-    .use(directiveHandler) // カスタムディレクティブ変換
-    .use(remarkBreaks) // 改行を<br>に変換
-    .use(remarkFrontmatter) // YAMLフロントマター処理
-    .use(remarkRehype, {
-      allowDangerousHtml: true, // 生HTML許可
+    .use(remarkParse)              // Step 1: Markdown → mdast
+    .use(remarkDirective)          // Step 2: ::: 構文をパース
+    .use(directiveHandler)         // Step 3: directive を HTML 用に変換
+    .use(remarkBreaks)             // Step 4: 改行処理
+    .use(remarkFrontmatter)        // Step 5: フロントマター処理
+    .use(remarkRehype, {           // Step 6: mdast → hast 変換
+      allowDangerousHtml: true,    // 生 HTML タグを許可
     })
-    .use(rehypeRaw) // 生HTML処理
-    .use(figureHast) // 画像をfigure要素に変換
-    .use(rehypeStringify); // HTML出力
+    .use(rehypeRaw)                // Step 7: 生 HTML 処理
+    .use(figureHast)               // Step 8: Vivliostyle 用図表処理
+    .use(rehypeStringify);         // Step 9: hast → HTML 文字列
   
   // 処理結果をログするラッパー
   const wrappedProcessor = {

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>remark-directive サンプル</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<h1>Sample Document - remark-directive コンテナーサンプル</h1>
+<p>これはremark-directiveを使用した様々なコンテナースタイルのデモンストレーションです。</p>
+<h2>基本的なコンテナー</h2>
+<div class="note"><p>これは <strong>注記（Note）</strong> コンテナーです。一般的な補足情報や追加説明を記載する際に使用します。</p></div>
+<div class="tip"><p>これは <strong>ヒント（Tip）</strong> コンテナーです。読者に役立つアドバイスやベストプラクティスを紹介する際に使用します。</p></div>
+<div class="warning"><p>これは <strong>警告（Warning）</strong> コンテナーです。注意が必要な事項を強調する際に使用します。</p></div>
+<div class="danger"><p>これは <strong>危険（Danger）</strong> コンテナーです。重大な問題や深刻なリスクを警告する際に使用します。</p></div>
+<div class="info"><p>これは <strong>情報（Info）</strong> コンテナーです。参考情報や補足的な詳細を提供する際に使用します。</p></div>
+<div class="caution"><p>これは <strong>注意（Caution）</strong> コンテナーです。慎重な対応が必要な事項を示す際に使用します。</p></div>
+<div class="important"><p>これは <strong>重要（Important）</strong> コンテナーです。特に重要な情報を強調する際に使用します。</p></div>
+<h2>コンテナー内のリスト</h2>
+<div class="tip"><p>コンテナー内では以下のような要素も使用できます：</p><ul>
+<li>リスト項目1</li>
+<li>リスト項目2</li>
+<li>リスト項目3</li>
+</ul><ol>
+<li>番号付きリスト</li>
+<li>こちらも使用可能</li>
+</ol></div>
+<h2>コードブロックを含むコンテナー</h2>
+<div class="note"><p>コンテナー内でコードブロックも使用できます：</p><pre><code class="language-javascript">// remark-directiveの使用例
+const result = await unified()
+  .use(remarkParse)
+  .use(remarkDirective)
+  .use(remarkRehype)
+  .use(rehypeStringify)
+  .process(markdown);
+</code></pre></div>
+<h2>ネストされたコンテナー</h2>
+<div class="info"><p>情報コンテナーの中に...</p><div class="warning"><p>警告コンテナーをネストすることも可能です。</p></div></div>
+<p>これは外側のコンテナーに戻ります。<br>
+:::</p>
+<h2>通常のテキスト</h2>
+<p>これは通常のMarkdownテキストです。コンテナーの外側では通常通りの表示になります。</p>
+<p><strong>太字</strong>、<em>斜体</em>、<code>インラインコード</code>なども通常通り使用できます。</p>
+</body>
+</html>
