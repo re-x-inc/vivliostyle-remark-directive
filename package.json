@@ -1,25 +1,28 @@
 {
   "name": "vivliostyle-remark-directive",
   "version": "1.0.0",
-  "description": "Vivliostyle with remark-directive sample",
   "type": "module",
+  "description": "Vivliostyle with remark-directive sample",
   "scripts": {
-    "preview": "npx vivliostyle preview",
-    "build": "npx vivliostyle build",
-    "pdf": "npx vivliostyle build",
-    "preview:revive": "npx vivliostyle preview --config vivliostyle.config.revive.js",
-    "build:revive": "npx vivliostyle build --config vivliostyle.config.revive.js",
-    "pdf:revive": "npx vivliostyle build --config vivliostyle.config.revive.js -o output-revive.pdf",
+    "preview": "npx @vivliostyle/cli preview",
+    "build": "npx @vivliostyle/cli build",
+    "pdf": "npx @vivliostyle/cli build",
+    "preview:revive": "npx @vivliostyle/cli preview --config vivliostyle.config.revive.js",
+    "build:revive": "npx @vivliostyle/cli build --config vivliostyle.config.revive.js",
+    "pdf:revive": "npx @vivliostyle/cli build --config vivliostyle.config.revive.js -o output-revive.pdf",
     "test:revive": "node test-processor-revive.js"
   },
   "keywords": [
     "vivliostyle",
-    "remark-containers",
+    "remark-directive",
     "markdown"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vivliostyle/vfm": "^2.2.1",
+    "rehype-document": "^7.0.3",
+    "rehype-format": "^5.0.1",
     "rehype-raw": "^7.0.0",
     "rehype-stringify": "^10.0.0",
     "remark-breaks": "^4.0.0",

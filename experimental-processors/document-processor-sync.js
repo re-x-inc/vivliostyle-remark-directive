@@ -1,11 +1,10 @@
-import { VFM, readMetadata } from '@vivliostyle/vfm';
+import { VFM } from '@vivliostyle/vfm';
 import remarkDirective from 'remark-directive';
 import { visit } from 'unist-util-visit';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
-import remarkFrontmatter from 'remark-frontmatter';
 
-// directiveを処理するハンドラー - VFMのMDAST段階で適用
+// directiveを処理するハンドラー
 function directiveHandler() {
   return (tree) => {
     let count = 0;
@@ -13,12 +12,8 @@ function directiveHandler() {
       count++;
       if (node.name === 'div' && node.attributes?.class) {
         const className = node.attributes.class;
-        
-        // containerDirectiveノードを段落ノードに変換し、
-        // その中にHTMLタグを直接埋め込む
         node.type = 'html';
         
-        // 子要素を文字列に変換
         const childrenContent = node.children
           .map(child => {
             if (child.type === 'paragraph' && child.children) {
@@ -36,10 +31,6 @@ function directiveHandler() {
         delete node.attributes;
       }
     });
-    
-    // if (count > 0) {
-    //   console.log(`🎯 Transformed ${count} directives to HTML`);
-    // }
   };
 }
 
@@ -47,21 +38,17 @@ function directiveHandler() {
 function createDirectiveParser() {
   return unified()
     .use(remarkParse)
-    .use(remarkFrontmatter)
     .use(remarkDirective)
     .use(directiveHandler);
 }
 
 export default function documentProcessor(options = {}, metadata = {}) {
-  // console.log('🎨 VFM-exact documentProcessor called');
-  
   // まずMarkdownをパースしてdirectiveを処理
   const parser = createDirectiveParser();
   
+  // 同期的な処理のみを提供（非同期処理を避ける）
   return {
-    process: async function(input) {
-      console.log('📝 Processing with directive pre-processor...');
-      
+    processSync: function(input) {
       let markdown = input;
       
       // VFileの場合は文字列に変換
@@ -81,10 +68,7 @@ export default function documentProcessor(options = {}, metadata = {}) {
       let processedMarkdown = '';
       
       function nodeToMarkdown(node, depth = 0) {
-        if (node.type === 'yaml') {
-          // frontmatterを保持
-          return `---\n${node.value}\n---`;
-        } else if (node.type === 'html') {
+        if (node.type === 'html') {
           return node.value;
         } else if (node.type === 'heading') {
           const level = node.depth || 1;
@@ -134,27 +118,9 @@ export default function documentProcessor(options = {}, metadata = {}) {
         .map(node => nodeToMarkdown(node))
         .join('\n\n');
       
-      console.log('📄 Processed markdown preview:');
-      console.log(processedMarkdown.substring(0, 300) + '...');
-      console.log('Contains <div class="note">:', processedMarkdown.includes('<div class="note">'));
-      console.log('Contains <div class="warning">:', processedMarkdown.includes('<div class="warning">'));
-      
-      // Step 3: メタデータを抽出
-      const extractedMetadata = readMetadata(processedMarkdown);
-      const combinedMetadata = { ...metadata, ...extractedMetadata };
-      
-      // Step 4: VFMで処理
-      const vfm = VFM(options, combinedMetadata);
-      const result = await vfm.process(processedMarkdown);
-      
-      console.log('\n✅ VFM processing complete');
-      console.log('- Result has contents:', !!result.contents);
-      console.log('- Result has value:', !!result.value);
-      
-      if (result.contents) {
-        console.log('- Contains div.note in output:', result.contents.includes('<div class="note">'));
-        console.log('- Contains div.warning in output:', result.contents.includes('<div class="warning">'));
-      }
+      // Step 3: VFMで処理（同期的に）
+      const vfm = VFM(options);
+      const result = vfm.processSync(processedMarkdown);
       
       // 互換性のため
       if (result.contents && !result.value) {
@@ -164,43 +130,10 @@ export default function documentProcessor(options = {}, metadata = {}) {
       return result;
     },
     
-    processSync: function(input) {
-      console.log('📝 ProcessSync with directive pre-processor...');
-      
-      let markdown = input;
-      
-      // VFileの場合は文字列に変換
-      if (typeof input !== 'string' && input.value) {
-        markdown = input.value;
-      } else if (typeof input !== 'string' && input.contents) {
-        markdown = input.contents;
-      }
-      
-      // Step 1: directiveを含むMarkdownをパース
-      const tree = parser.parse(markdown);
-      
-      // directiveをHTMLに変換
-      parser.runSync(tree);
-      
-      // Step 2: 変換されたMarkdownを文字列に戻す
-      const processedMarkdown = tree.children
-        .map(node => nodeToMarkdown(node))
-        .join('\n\n');
-      
-      // Step 3: メタデータを抽出
-      const extractedMetadata = readMetadata(processedMarkdown);
-      const combinedMetadata = { ...metadata, ...extractedMetadata };
-      
-      // Step 4: VFMで処理
-      const vfm = VFM(options, combinedMetadata);
-      const result = vfm.processSync(processedMarkdown);
-      
-      // 互換性のため
-      if (result.contents && !result.value) {
-        result.value = result.contents;
-      }
-      
-      return result;
+    // processメソッドも同期的に実装
+    process: function(input) {
+      // Promiseでラップして返す
+      return Promise.resolve(this.processSync(input));
     }
   };
 }

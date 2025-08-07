@@ -1,0 +1,9 @@
+[submodule "vivliostyle-cli"]
+	path = references/vivliostyle-cli
+	url = https://github.com/vivliostyle/vivliostyle-cli.git
+[submodule "references/vivliostyle-cli"]
+	path = references/vivliostyle-cli
+	url = https://github.com/vivliostyle/vivliostyle-cli.git
+[submodule "references/vfm"]
+	path = references/vfm
+	url = https://github.com/vivliostyle/vfm.git
