@@ -1,21 +1,22 @@
-# 比較表の「VFM機能」列の正確な意味
+# 比較表の「VFM 機能」列の正確な意味
 
-## VFMインスタンスの利用有無
+## VFM インスタンスの利用有無
 
-比較表の「VFM機能」列は、**VFM（@vivliostyle/vfm）のインスタンスを利用しているかどうか**を示しています。
+比較表の「VFM 機能」列は、**VFM（@vivliostyle/vfm）のインスタンスを利用しているかどうか**を示しています。
 
-### ✅ = VFMインスタンスを利用
+### ✅ = VFM インスタンスを利用
 
 ```javascript
-import { VFM } from '@vivliostyle/vfm';
+import { VFM } from "@vivliostyle/vfm";
 
 export default function documentProcessor(options = {}, metadata = {}) {
-  const vfm = VFM(options);  // ← VFMインスタンスを作成
+  const vfm = VFM(options); // ← VFMインスタンスを作成
   // ...
 }
 ```
 
 以下のプロセッサーがこれに該当：
+
 - `document-processor-debug.js`
 - `document-processor-inject.js`
 - `document-processor-minimal.js`
@@ -27,46 +28,47 @@ export default function documentProcessor(options = {}, metadata = {}) {
 - `document-processor-vfm-early.js`
 - **`document-processor-vfm-exact.js`** ✨
 
-### ❌ = VFMインスタンスを利用しない
+### ❌ = VFM インスタンスを利用しない
 
 ```javascript
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
+import { unified } from "unified";
+import remarkParse from "remark-parse";
 // VFMをインポートせず、独自のパイプラインを構築
 
 export default function documentProcessor(options = {}, metadata = {}) {
-  const processor = unified()
-    .use(remarkParse)
-    .use(remarkDirective)
-    // ...
+  const processor = unified().use(remarkParse).use(remarkDirective);
+  // ...
 }
 ```
 
 以下のプロセッサーがこれに該当：
+
 - `document-processor.js`
 - `document-processor-fixed.js`
 
-### 一部 = VFMのプラグインのみを利用
+### 一部 = VFM のプラグインのみを利用
 
 ```javascript
 // VFMインスタンスは作らないが、VFMのプラグインを個別にインポート
-import { mdast as attr } from '@vivliostyle/vfm/lib/plugins/attr.js';
-import { mdast as code } from '@vivliostyle/vfm/lib/plugins/code.js';
+import { mdast as attr } from "@vivliostyle/vfm/lib/plugins/attr.js";
+import { mdast as code } from "@vivliostyle/vfm/lib/plugins/code.js";
 ```
 
 以下のプロセッサーがこれに該当：
+
 - `document-processor-complete.js`
 - `document-processor-vfm-native.js`
 
-## なぜVFMインスタンスの利用が重要か
+## なぜ VFM インスタンスの利用が重要か
 
-1. **保守性**: VFMの内部実装が変わってもAPIが維持される
-2. **互換性**: VFMのすべての機能が自動的に利用可能
-3. **簡潔性**: VFMの複雑な処理を再実装する必要がない
+1. **保守性**: VFM の内部実装が変わっても API が維持される
+2. **互換性**: VFM のすべての機能が自動的に利用可能
+3. **簡潔性**: VFM の複雑な処理を再実装する必要がない
 
 ## まとめ
 
 `document-processor-vfm-exact.js`は：
-- ✅ VFMインスタンスを利用
-- ✅ remark-directiveの処理も実現
+
+- ✅ VFM インスタンスを利用
+- ✅ remark-directive の処理も実現
 - ✅ 両方の利点を組み合わせた最適解
