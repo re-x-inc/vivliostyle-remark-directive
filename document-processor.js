@@ -7,6 +7,7 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
+import { hast as vfmFigure } from "@vivliostyle/vfm/lib/plugins/figure.js";
 import { visit } from "unist-util-visit";
 
 /**
@@ -280,6 +281,7 @@ export default function documentProcessor(factoryOptions = {}) {
         })
         .use(remarkRehype, { allowDangerousHtml: true })
         .use(rehypeRaw)
+        .use(vfmFigure)
         .use(rehypeSlug)
         .use(rehypeStringify, { allowDangerousHtml: true });
 
